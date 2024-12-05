@@ -1,29 +1,36 @@
-import { Pressable, Text, StyleSheet } from "react-native";
+import { Pressable, Text, StyleSheet, Vibration } from 'react-native';
+import { GlobalStyles } from "../theme/GlobalStyles";
+import * as Haptics from 'expo-haptics';
 
 interface Props {
     label: string,
     width: number,
+    tipo?: 'botonNormal' | 'botonSigno' | 'botonExtra' | 'botonIgual'
     onPress?: () => void;
 }
 
-export const BotonOperacion = ({label, width, onPress}:Props) => {
+export const BotonOperacion = ({label, width, tipo='botonNormal', onPress}:Props) => {
+    const handlePress = () => {
+        if (onPress) {
+            onPress();
+            Haptics.selectionAsync();
+            console.log('vibro');
+        }
+
+    }
+
     return (
         <Pressable>
             <Text 
-                style={[styles.boton, {width}]}
-                onPress={onPress}>{label}</Text>
+                style={[
+                        tipo === 'botonNormal' ? GlobalStyles.botonNormal: null,
+                        tipo === 'botonSigno' ? GlobalStyles.botonSigno : null,
+                        tipo === 'botonExtra' ? GlobalStyles.botonExtra : null,
+                        tipo === 'botonIgual' ? GlobalStyles.botonIgual : null,
+                    
+                    
+                    , {width}]}
+                onPress={handlePress}>{label}</Text>
         </Pressable>
     )
 };
-
-const styles = StyleSheet.create({
-    boton: {
-        width:80,
-        textAlign: 'center',
-        padding: 10,
-        fontSize: 30,
-        fontWeight: 300,
-        borderColor: 'black',
-        borderWidth: 2,
-    }
-  });

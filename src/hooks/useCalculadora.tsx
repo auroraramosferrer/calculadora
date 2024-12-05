@@ -1,5 +1,6 @@
 import {useRef, useState, useEffect} from 'react';
 
+
 enum Operadores {
     sumar = '+',
     restar = '-',
@@ -91,6 +92,12 @@ export const useCalculadora = () =>{
         UltimaOperacion.current = Operadores.sumar;
     }
 
+    const calcular = (operador:Operadores) => {
+        establecerUltimoNumero();
+        UltimaOperacion.current = operador;
+
+    }
+
     const calcularResultado = () => {
         const [primerValor, operacion, segundoValor] = formula.split(' ');
 
@@ -110,7 +117,9 @@ export const useCalculadora = () =>{
                 return num1 * num2;
 
             case Operadores.dividir:
+                if(num2 === 0) return 'Imposible dividir entre 0';
                 return num1 / num2;
+                
 
             default:
                 throw new Error(`La operación ( ${operacion} ) no está implementada `)
@@ -152,16 +161,13 @@ export const useCalculadora = () =>{
 
     return {
         // Propiedades
-        formula, numero, numeroAnterior,
+        formula, numero, numeroAnterior,Operadores,
         //Metodos
         construirNumero,
         clean,
         cambiarSigno,
         borrarDigito,
-        operacionDividir,
-        operacionMultiplicar,
-        operacionRestar,
-        operacionSumar,
+        calcular,
         calcularResultado,
         resultado
     }
